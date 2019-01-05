@@ -1,12 +1,12 @@
 public class LinkedList {
 
-    Node head;
+    private Node head;
 
     public LinkedList() {
         this.head = null;
     }
 
-    public Node createNode(int value) {
+    private Node createNode(int value) {
         Node node = new Node(value , null);
         return node;
     }
@@ -19,36 +19,59 @@ public class LinkedList {
         }
     }
 
-    public void insertNode(Node node) {
+    public void insert(int value) {
+        Node insertNode = createNode(value);
         if(this.head == null) {
-            head = node;
+            head = insertNode;
         } else {
-            node.next = head;
-            head = node;
-        }
-    }
-
-    public void deleteNode(Node node) {
-        if(head == node) {
-            head = head.next;
-        } else {
-            Node previous = head;
-            while(previous.next != node) {
-                previous = previous.next;
+            Node currentNode = head;
+            while(currentNode.next != null) {
+                currentNode = currentNode.next;
             }
-            previous.next = node.next;
+            currentNode.next = insertNode;
         }
     }
 
-    public Node searchNode(int value) {
+    public void delete(int value) {
+        if(head.value == value) {
+            head = head.next;
+        }
+        Node currentNode = head;
+        while(currentNode != null) {
+            Node previousDeleteNode = searchPreviousOf(currentNode, value);
+            if(previousDeleteNode != null) {
+                if(previousDeleteNode.next.next != null) {
+                    previousDeleteNode.next.value = previousDeleteNode.next.next.value;
+                    previousDeleteNode.next.next = previousDeleteNode.next.next.next;
+                } else {
+                    previousDeleteNode.next = null;
+                }
+            }
+            currentNode = previousDeleteNode;
+        }
+
+    }
+
+    private Node searchPreviousOf(Node node , int value) {
+        while(node.next != null && node.next.value != value) {
+            node = node.next;
+        }
+        if(node.next != null && node.next.value == value) {
+            return node;
+        }
+        return null;
+    }
+
+
+    public boolean searchNode(int value) {
         Node iterate = head;
         while(iterate!= null) {
             if(iterate.value == value) {
-                return iterate;
+                return true;
             }
             iterate = iterate.next;
         }
-        return null;
+        return false;
     }
 
 }
