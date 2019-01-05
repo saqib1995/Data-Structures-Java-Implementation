@@ -33,19 +33,19 @@ public class LinkedList {
     }
 
     public void delete(int value) {
-        if(head.value == value) {
+
+        while(head != null && head.value == value) {
             head = head.next;
         }
+        if(head == null) {
+            return;
+        }
+
         Node currentNode = head;
         while(currentNode != null) {
             Node previousDeleteNode = searchPreviousOf(currentNode, value);
             if(previousDeleteNode != null) {
-                if(previousDeleteNode.next.next != null) {
-                    previousDeleteNode.next.value = previousDeleteNode.next.next.value;
-                    previousDeleteNode.next.next = previousDeleteNode.next.next.next;
-                } else {
-                    previousDeleteNode.next = null;
-                }
+                    previousDeleteNode.next = previousDeleteNode.next.next;
             }
             currentNode = previousDeleteNode;
         }
@@ -53,6 +53,9 @@ public class LinkedList {
     }
 
     private Node searchPreviousOf(Node node , int value) {
+        if(node == null) {
+            return null;
+        }
         while(node.next != null && node.next.value != value) {
             node = node.next;
         }
