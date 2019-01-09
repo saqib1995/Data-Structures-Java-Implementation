@@ -1,13 +1,10 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Queue<T> {
-    private int head = 0;
-    private int tail = 0;
-    List<T> queue;
+    private Node head;
+    private Node tail;
 
     public Queue() {
-        queue = new ArrayList<>();
+        head = new Node(null , null);
+        tail = head;
     }
 
     public boolean isEmpty() {
@@ -18,17 +15,25 @@ public class Queue<T> {
     }
 
     public void enqueue(T value) {
-        queue.add(value);
-        tail++;
+
+        tail.value = value;
+        tail.next = new Node(null , null);
+        tail = tail.next;
+
     }
 
     public void dequeue() {
-        head++;
+        if(isEmpty()) {
+            return;
+        }
+        head = head.next;
     }
 
     public T getHead() {
-        return queue.get(head);
+        if(isEmpty()) {
+            return null;
+        }
+        return (T) head.value;
     }
-
-
+    
 }
