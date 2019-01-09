@@ -1,3 +1,2 @@
-public class Hashtable  {
-
+public class Hashtable {
 }
