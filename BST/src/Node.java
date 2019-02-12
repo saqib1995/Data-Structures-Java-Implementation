@@ -1,7 +1,6 @@
-public class Node {
+class Node {
 
     int value;
-    Node parent;
     Node leftChild;
     Node rightChild;
 
@@ -9,6 +8,5 @@ public class Node {
         this.value = value;
         this.leftChild = null;
         this.rightChild = null;
-        this.parent = null;
     }
 }
