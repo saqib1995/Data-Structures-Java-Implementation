@@ -1,8 +1,10 @@
 public class BinarySearchTree {
     Node root;
+    int preOrderIndex;
 
     public BinarySearchTree() {
         this.root = null;
+        preOrderIndex = 0;
 
     }
 
@@ -214,4 +216,50 @@ public class BinarySearchTree {
 
         return maximum(iteratingNode.rightChild);
     }
+
+
+
+    public Node inorderplusPreorder(int[] inorderArray , int[] preorderArray) {
+        int inorderLength = inorderArray.length;
+
+        root = constructTree(inorderArray , preorderArray , 0 , inorderLength - 1);
+        return  root;
+    }
+
+    private Node constructTree(int[] inorderArray , int[] preorderArray , int inorderStart , int inorderEnd) {
+
+
+        if(inorderStart > inorderEnd) {
+            return null;
+        }
+
+        Node iteratingNode = new Node(preorderArray[preOrderIndex]);
+        preOrderIndex++;
+
+        if(inorderStart == inorderEnd) {
+            return iteratingNode;
+        }
+
+            int k = 0;
+            for(int i = inorderStart ; i <= inorderEnd ; i++) {
+                if(inorderArray[i] == iteratingNode.value)  {
+                    k = i;
+                    break;
+                }
+            }
+
+            iteratingNode.leftChild = constructTree(inorderArray , preorderArray , inorderStart , k - 1);
+            iteratingNode.rightChild = constructTree(inorderArray , preorderArray , k + 1 , inorderEnd);
+
+
+        return iteratingNode;
+    }
+
+
+
+
+
+
+
+
 }
