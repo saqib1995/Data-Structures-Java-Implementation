@@ -1,27 +1,19 @@
 public class BinarySearchTree {
     Node root;
-    int preOrderIndex;
 
     public BinarySearchTree() {
         this.root = null;
-        preOrderIndex = 0;
-
     }
 
     public void insert(int value) {
-
-
         Node insertingNode = new Node(value);
         if(root == null) {
-            System.out.println("inserting at root");
             root = insertingNode;
             return;
         }
         Node iteratingNode = root;
         insertHelper(insertingNode , iteratingNode);
-
     }
-
 
     private void insertHelper(Node insertingNode , Node iteratingNode) {
         if(iteratingNode == null) {
@@ -31,18 +23,13 @@ public class BinarySearchTree {
             if(iteratingNode.leftChild != null) {
                 insertHelper(insertingNode, iteratingNode.leftChild);
             } else {
-                    System.out.println("inserting " + insertingNode.value + " to left of " + iteratingNode.value);
                     iteratingNode.leftChild = insertingNode;
-                    return;
             }
-        }
-        if(insertingNode.value >= iteratingNode.value) {
+        } else {
             if(iteratingNode.rightChild != null) {
                 insertHelper(insertingNode, iteratingNode.rightChild);
             } else {
-                System.out.println("inserting " + insertingNode.value + " to right of " + iteratingNode.value);
                 iteratingNode.rightChild = insertingNode;
-                return;
             }
         }
     }
@@ -62,10 +49,8 @@ public class BinarySearchTree {
             if(iteratingNode.leftChild == null && iteratingNode.rightChild == null) {
                 Node parentNode = searchParent(value);
                 if(value <= parentNode.value) {
-                    System.out.println("deleted " + value + "from " + parentNode.value);
                     parentNode.leftChild = null;
                 } else {
-                    System.out.println("deleted " + value + "from " + parentNode.value);
                     parentNode.rightChild = null;
                 }
             } else if(iteratingNode.leftChild == null || iteratingNode.rightChild == null) {
@@ -93,7 +78,7 @@ public class BinarySearchTree {
         } else {
             if(iteratingNode.leftChild != null && value <= iteratingNode.value) {
                 deleteHelper(iteratingNode.leftChild , value);
-            } else if (iteratingNode.rightChild != null && value >= iteratingNode.value){
+            } else if (iteratingNode.rightChild != null && value > iteratingNode.value){
                 deleteHelper(iteratingNode.rightChild , value);
             }
         }
@@ -112,10 +97,9 @@ public class BinarySearchTree {
         if(iteratingNode.value == value) {
             return true;
         }
-
         if(value <= iteratingNode.value && iteratingNode.leftChild != null) {
             return search(iteratingNode.leftChild, value);
-        } else if(value >= iteratingNode.value && iteratingNode.rightChild != null) {
+        } else if(value > iteratingNode.value && iteratingNode.rightChild != null) {
             return search(iteratingNode.rightChild, value);
         }
         return false;
@@ -123,7 +107,6 @@ public class BinarySearchTree {
 
     private Node searchParent(int value) {
         Node childNode = new Node(value);
-
         if(childNode.value == root.value) {
             return null;
         }
@@ -149,19 +132,10 @@ public class BinarySearchTree {
     private void inorder(Node iteratingNode) {
         if(iteratingNode == null) {
             return;
-        } else if(iteratingNode.leftChild == null && iteratingNode.rightChild == null) {
-            System.out.println(iteratingNode.value);
-        } else {
-            if(iteratingNode.leftChild != null) {
-                inorder(iteratingNode.leftChild);
-            }
-
-            System.out.println(iteratingNode.value);
-
-            if(iteratingNode.rightChild != null) {
-                inorder(iteratingNode.rightChild);
-            }
         }
+        inorder(iteratingNode.leftChild);
+        System.out.println(iteratingNode.value);
+        inorder(iteratingNode.rightChild);
     }
 
     public void preorder() {
@@ -169,16 +143,12 @@ public class BinarySearchTree {
     }
 
     private void preorder(Node iteratingNode) {
-        if(iteratingNode != null) {
-            System.out.println(iteratingNode.value);
+        if(iteratingNode == null) {
+            return;
         }
-        if(iteratingNode.leftChild != null) {
-            preorder(iteratingNode.leftChild);
-        }
-
-        if(iteratingNode.rightChild != null) {
-            preorder(iteratingNode.rightChild);
-        }
+        System.out.println(iteratingNode.value);
+        preorder(iteratingNode.leftChild);
+        preorder(iteratingNode.rightChild);
     }
 
     public void postorder() {
@@ -186,23 +156,20 @@ public class BinarySearchTree {
     }
 
     private void postorder(Node iteratingNode) {
-        if(iteratingNode.rightChild != null) {
-            postorder(iteratingNode.rightChild);
+        if(iteratingNode == null) {
+            return;
         }
-        if(iteratingNode.leftChild != null) {
-            postorder(iteratingNode.leftChild);
-        }
+        postorder(iteratingNode.rightChild);
+        postorder(iteratingNode.leftChild);
         System.out.println(iteratingNode.value);
     }
 
     public Node minimum(Node iteratingNode) {
-
         if(iteratingNode.leftChild == null && iteratingNode.rightChild == null) {
             return iteratingNode;
         } else if (iteratingNode.leftChild == null && iteratingNode.rightChild != null) {
             return iteratingNode;
         }
-
         return minimum(iteratingNode.leftChild);
     }
 
@@ -213,53 +180,37 @@ public class BinarySearchTree {
         } else if (iteratingNode.leftChild != null && iteratingNode.rightChild == null) {
             return iteratingNode;
         }
-
         return maximum(iteratingNode.rightChild);
     }
 
 
 
-    public Node inorderplusPreorder(int[] inorderArray , int[] preorderArray) {
+    public Node inorderPreorderTreeConstruct(int[] inorderArray , int[] preorderArray) {
         int inorderLength = inorderArray.length;
-
-        root = constructTree(inorderArray , preorderArray , 0 , inorderLength - 1);
+        int preOrderIndex = 0;
+        root = constructTree(inorderArray , preorderArray , 0 , inorderLength - 1 , preOrderIndex);
         return  root;
     }
 
-    private Node constructTree(int[] inorderArray , int[] preorderArray , int inorderStart , int inorderEnd) {
-
-
+    private Node constructTree(int[] inorderArray , int[] preorderArray , int inorderStart , int inorderEnd , int preOrderIndex) {
         if(inorderStart > inorderEnd) {
             return null;
         }
-
         Node iteratingNode = new Node(preorderArray[preOrderIndex]);
         preOrderIndex++;
-
         if(inorderStart == inorderEnd) {
             return iteratingNode;
         }
 
-            int k = 0;
-            for(int i = inorderStart ; i <= inorderEnd ; i++) {
-                if(inorderArray[i] == iteratingNode.value)  {
-                    k = i;
-                    break;
-                }
+        int k = 0;
+        for(int i = inorderStart ; i <= inorderEnd ; i++) {
+            if(inorderArray[i] == iteratingNode.value)  {
+                k = i;
+                break;
             }
-
-            iteratingNode.leftChild = constructTree(inorderArray , preorderArray , inorderStart , k - 1);
-            iteratingNode.rightChild = constructTree(inorderArray , preorderArray , k + 1 , inorderEnd);
-
-
+        }
+        iteratingNode.leftChild = constructTree(inorderArray , preorderArray , inorderStart , k - 1 , preOrderIndex);
+        iteratingNode.rightChild = constructTree(inorderArray , preorderArray , k + 1 , inorderEnd , preOrderIndex);
         return iteratingNode;
     }
-
-
-
-
-
-
-
-
 }
